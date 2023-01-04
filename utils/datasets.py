@@ -191,7 +191,12 @@ class LoadImages:  # for inference
         img = letterbox(img0, self.img_size, stride=self.stride)[0]
 
         # Convert
-        img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
+        if 'USE_GRAY_INPUT' in os.environ and os.environ['USE_GRAY_INPUT']:
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # bgr to gray
+            img = img.reshape([1, *img.shape]) # HW to CHW
+        else:
+            img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
+            
         img = np.ascontiguousarray(img)
 
         return path, img, img0, self.cap
@@ -254,7 +259,12 @@ class LoadWebcam:  # for inference
         img = letterbox(img0, self.img_size, stride=self.stride)[0]
 
         # Convert
-        img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
+        if 'USE_GRAY_INPUT' in os.environ and os.environ['USE_GRAY_INPUT']:
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # bgr to gray
+            img = img.reshape([1, *img.shape]) # HW to CHW
+        else:
+            img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
+        # img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
         img = np.ascontiguousarray(img)
 
         return img_path, img, img0, None
@@ -623,7 +633,12 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
             labels_out[:, 1:] = torch.from_numpy(labels)
 
         # Convert
-        img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
+        if 'USE_GRAY_INPUT' in os.environ and os.environ['USE_GRAY_INPUT']:
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # bgr to gray
+            img = img.reshape([1, *img.shape]) # HW to CHW
+        else:
+            img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
+        # img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
         img = np.ascontiguousarray(img)
 
         return torch.from_numpy(img), labels_out, self.img_files[index], shapes
