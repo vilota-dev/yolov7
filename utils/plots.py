@@ -138,6 +138,7 @@ def plot_images(images, targets, paths=None, fname='images.jpg', names=None, max
     colors = color_list()  # list of colors
     mosaic = np.full((int(ns * h), int(ns * w), 3), 255, dtype=np.uint8)  # init
     for i, img in enumerate(images):
+
         if i == max_subplots:  # if last batch has fewer images than we expect
             break
 
@@ -145,6 +146,10 @@ def plot_images(images, targets, paths=None, fname='images.jpg', names=None, max
         block_y = int(h * (i % ns))
 
         img = img.transpose(1, 2, 0)
+
+        if 'USE_GRAY_INPUT' in os.environ and os.environ['USE_GRAY_INPUT']:
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB) # bgr to gray
+
         if scale_factor < 1:
             img = cv2.resize(img, (w, h))
 

@@ -1,0 +1,5 @@
+train: /home/evzen/dataset/train_dataset/v7-tiny/10c_X_10kd_3/train/images
+val: /home/evzen/dataset/train_dataset/v7-tiny/10c_X_10kd_3/train/images
+
+nc: 10
+names: ['180deg left', '180deg right', '90deg left', '90deg right', 'Continue forward', 'Fly higher', 'Fly lower', 'Land here', 'No Fly zone', 'Stop for 5s']
